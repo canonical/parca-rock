@@ -1,0 +1,10 @@
+process:
+  parca:
+    running: true
+http:
+  ready:
+    status: 200
+    url: http://localhost:7070/ready
+  metrics:
+    status: 200
+    url: http://localhost:7070/metrics
