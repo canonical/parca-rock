@@ -20,21 +20,19 @@ parts:
     source-depth: 1
     build-snaps:
       - go/1.23/stable
-      - node/18/stable
     build-environment:
       - BUILD_IN_CONTAINER: "false"
       - NODE_OPTIONS: "--max-old-space-size=8192"
     build-packages:
       - libsystemd-dev
       - jq
-    # pnpm is locked to 8.15.9 as latest fails with `ERR_PNPM_LOCKFILE_BREAKING_CHANGE Lockfile /root/parts/parca/build/ui/pnpm-lock.yaml not compatible with current pnpm`
+      - nodejs
+      - npm
     override-build: |
-      npm install -g pnpm@8.15.9
-      npm install -g lerna@8.1.9
-      npm install -g typescript@5.0.4
-      cd ui && pnpm install --frozen-lockfile
-      pnpm run build
-      cd .. && make go/bin
+      npm install -g pnpm@9.15.4
+      make ui/build
+      make go/deps
+      go build -gcflags="all=-N -l" -ldflags "-X main.Version=${CRAFT_PROJECT_VERSION}" -o $CRAFT_PART_INSTALL/bin/ ./cmd/parca
     stage:
       - bin/parca
   default-config:
