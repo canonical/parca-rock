@@ -18,7 +18,7 @@ push-to-registry version:
 
 # Pack a rock of a specific version
 pack version:
-  cd "$version" && rockcraft pack --debug --verbosity debug
+  cd "$version" && rockcraft pack
 
 # `rockcraft clean` for a specific version
 clean version:
