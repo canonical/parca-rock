@@ -6,7 +6,7 @@ base: ubuntu@24.04
 license: Apache-2.0
 services:
   parca:
-    command: /bin/parca --config-path=/etc/parca/parca.yaml
+    command: /parca --config-path=/etc/parca/parca.yaml
     override: replace
     startup: enabled
 platforms:
@@ -32,9 +32,9 @@ parts:
       npm install -g pnpm@9.15.4
       make ui/build
       make go/deps
-      go build -gcflags="all=-N -l" -ldflags "-X main.Version=${CRAFT_PROJECT_VERSION}" -o $CRAFT_PART_INSTALL/bin/ ./cmd/parca
+      go build -gcflags="all=-N -l" -ldflags "-X main.Version=${CRAFT_PROJECT_VERSION}" -o $CRAFT_PART_INSTALL/ ./cmd/parca
     stage:
-      - bin/parca
+      - parca
   default-config:
     plugin: dump
     source: .
