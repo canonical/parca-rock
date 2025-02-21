@@ -1,7 +1,7 @@
 name: parca
 summary: Parca in a rock.
 description: "Parca continuous profiling tool."
-version: "0.22.0"
+version: "0.23.0"
 base: ubuntu@24.04
 license: Apache-2.0
 services:
@@ -16,7 +16,7 @@ parts:
     plugin: go
     source: https://github.com/parca-dev/parca
     source-type: git
-    source-tag: "v0.22.0"
+    source-tag: "v0.23.0"
     source-depth: 1
     build-snaps:
       - go/1.23/stable
