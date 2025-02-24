@@ -32,7 +32,7 @@ parts:
       npm install -g pnpm@9.15.4
       make ui/build
       make go/deps
-      go build -gcflags="all=-N -l" -ldflags "-X main.Version=${CRAFT_PROJECT_VERSION}" -o $CRAFT_PART_INSTALL/ ./cmd/parca
+      go build -gcflags="all=-N -l" -ldflags "-X main.version=${CRAFT_PROJECT_VERSION}" -o $CRAFT_PART_INSTALL/ ./cmd/parca
     stage:
       - parca
   default-config:
