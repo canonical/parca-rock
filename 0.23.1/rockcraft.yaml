@@ -1,0 +1,56 @@
+name: parca
+summary: Parca in a rock.
+description: "Parca continuous profiling tool."
+version: "0.23.1"
+base: ubuntu@24.04
+license: Apache-2.0
+services:
+  parca:
+    command: /parca --config-path=/etc/parca/parca.yaml
+    override: replace
+    startup: enabled
+platforms:
+  amd64:
+parts:
+  parca:
+    plugin: go
+    source: https://github.com/parca-dev/parca
+    source-type: git
+    source-tag: "v0.23.1"
+    source-depth: 1
+    build-snaps:
+      - go/1.23/stable
+    build-environment:
+      - BUILD_IN_CONTAINER: "false"
+      - NODE_OPTIONS: "--max-old-space-size=8192"
+    build-packages:
+      - libsystemd-dev
+      - jq
+      - nodejs
+      - npm
+    override-build: |
+      npm install -g pnpm@9.15.4
+      make ui/build
+      make go/deps
+      go build -gcflags="all=-N -l" -ldflags "-X main.Version=${CRAFT_PROJECT_VERSION}" -o $CRAFT_PART_INSTALL/ ./cmd/parca
+    stage:
+      - parca
+  default-config:
+    plugin: dump
+    source: .
+    organize:
+      parca.yaml: etc/parca/parca.yaml
+    stage:
+      - etc/parca/parca.yaml
+  ca-certs:
+    plugin: nil
+    overlay-packages: [ca-certificates]
+  deb-security-manifest:
+    plugin: nil
+    after:
+      - parca
+      - ca-certs
+    override-prime: |
+      set -x
+      mkdir -p $CRAFT_PRIME/usr/share/rocks/
+      (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query --admindir=$CRAFT_PRIME/var/lib/dpkg/ -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > $CRAFT_PRIME/usr/share/rocks/dpkg.query
