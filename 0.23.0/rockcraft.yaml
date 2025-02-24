@@ -23,12 +23,14 @@ parts:
     build-environment:
       - BUILD_IN_CONTAINER: "false"
       - NODE_OPTIONS: "--max-old-space-size=8192"
+      - RELEASE_TAG: "v0.23.0"
     build-packages:
       - libsystemd-dev
       - jq
       - nodejs
       - npm
     override-build: |
+      rm ./ui/packages/app/web/.env # https://github.com/parca-dev/parca/commit/3c86ddbb0dc7f47bd8e7dfeea0f3c87d1428163a#diff-a87fe5ff9949176705be7bff417acf6bec9355fdda9d1bc0fa9c8910e5666381
       npm install -g pnpm@9.15.4
       make ui/build
       make go/deps
