@@ -4,8 +4,12 @@
 [![Publish to GHCR:dev](https://github.com/canonical/parca-rock/actions/workflows/rock-release-dev.yaml/badge.svg)](https://github.com/canonical/parca-rock/actions/workflows/rock-release-dev.yaml)
 [![Update Rock](https://github.com/canonical/parca-rock/actions/workflows/rock-update.yaml/badge.svg)](https://github.com/canonical/parca-rock/actions/workflows/rock-update.yaml)
 
-[Rocks](https://canonical-rockcraft.readthedocs-hosted.com/en/latest/) for [Parca](https://www.parca.dev/).  
-This repository holds all the necessary files to build rocks for the upstream versions we support. The Parca rock is used by the [parca-k8s-operator](https://github.com/canonical/parca-k8s-operator) charm.
+[Rocks](https://canonical-rockcraft.readthedocs-hosted.com/en/latest/) for [Nginx Prometheus-exporter](https://github.com/nginx/nginx-prometheus-exporter).  
+This repository holds all the necessary files to build rocks for the upstream versions we support. The Nginx prometheus-exporter rock is used by several observability charms including:
+- [tempo-coordinator-k8s-operator](https://github.com/canonical/tempo-coordinator-k8s-operator)
+- [loki-coordinator-k8s-operator](https://github.com/canonical/loki-coordinator-k8s-operator)
+- [mimir-coordinator-k8s-operator](https://github.com/canonical/mimir-coordinator-k8s-operator)
+- [parca-k8s-operator](https://github.com/canonical/parca-k8s-operator)
 
 The rocks on this repository are built with [OCI Factory](https://github.com/canonical/oci-factory/), which also takes care of periodically rebuilding the images.
 
@@ -23,5 +27,5 @@ Automation takes care of:
 * validating PRs, by simply trying to build the rock;
 * pulling upstream releases, creating a PR with the necessary files to be manually reviewed;
 * on PRs, validate the added (or modified) rocks by running `kgoss`;
-* releasing to GHCR at [ghcr.io/canonical/parca:dev](https://ghcr.io/canonical/parca:dev), when merging to main, for development purposes.
+* releasing to GHCR at [ghcr.io/canonical/nginx-prometheus-exporter:dev](https://ghcr.io/canonical/nginx-prometheus-exporter:dev), when merging to main, for development purposes.
 

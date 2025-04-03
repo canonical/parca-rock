@@ -1,54 +1,46 @@
-name: parca
-summary: Parca in a rock.
-description: "Parca continuous profiling tool."
-version: "0.22.0"
+name: nginx-prometheus-exporter
+summary: Petrified nginx-prometheus-exporter.
+description: "Nginx prometheus exporter."
+version: "1.4.1"
 base: ubuntu@24.04
 license: Apache-2.0
 services:
-  parca:
-    command: /parca --config-path=/etc/parca/parca.yaml
+  nginx-prometheus-exporter:
+    command: nginx-promx
     override: replace
     startup: enabled
 platforms:
   amd64:
 parts:
-  parca:
+  nginx-prometheus-exporter:
     plugin: go
-    source: https://github.com/parca-dev/parca
+    source: https://github.com/nginx/nginx-prometheus-exporter
     source-type: git
-    source-tag: "v0.22.0"
+    source-tag: "v1.4.1"
     source-depth: 1
     build-snaps:
-      - go/1.23/stable
+      - go/1.24/stable
     build-environment:
       - BUILD_IN_CONTAINER: "false"
       - NODE_OPTIONS: "--max-old-space-size=8192"
+
     build-packages:
-      - libsystemd-dev
-      - jq
-      - nodejs
-      - npm
+      - make
     override-build: |
-      npm install -g pnpm@9.15.4
-      make ui/build
-      make go/deps
-      go build -gcflags="all=-N -l" -ldflags "-X main.Version=${CRAFT_PROJECT_VERSION}" -o $CRAFT_PART_INSTALL/ ./cmd/parca
+      make nginx-prometheus-exporter
+      # we shorten the name to nginx-promx to work around an issue with goss truncating the 
+      # process name to 15 characters in its 'process is running' test
+      install -D -m755 nginx-prometheus-exporter ${CRAFT_PART_INSTALL}/bin/nginx-promx
     stage:
-      - parca
-  default-config:
-    plugin: dump
-    source: .
-    organize:
-      parca.yaml: etc/parca/parca.yaml
-    stage:
-      - etc/parca/parca.yaml
+      - bin/nginx-promx
+
   ca-certs:
     plugin: nil
     overlay-packages: [ca-certificates]
   deb-security-manifest:
     plugin: nil
     after:
-      - parca
+      - nginx-prometheus-exporter
       - ca-certs
     override-prime: |
       set -x
