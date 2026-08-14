@@ -1,6 +1,0 @@
-object_storage:
-  bucket:
-    type: "FILESYSTEM"
-    config:
-      directory: "/var/lib/parca"
-scrape_configs: []
